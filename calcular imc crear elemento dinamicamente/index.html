@@ -4,6 +4,12 @@
     <script>
 
         function calcularIMC(){
+            // comprobamos so existe el elemento imagen
+            var list_imagen =document.getElementById("div_imagen");
+            if(list_imagen.hasChildNodes){
+                list_imagen.removeChild(list_imagen.childNodes[0]);
+            }
+           
             // Obtener peso y estatura
             var estatura = parseFloat(document.getElementById("estatura").value);
             var peso = parseFloat(document.getElementById("peso").value);
