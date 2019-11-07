@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<head>
+    <script>
+
+        function esparimpar(){
+            var valor = parseInt(document.getElementById("valor").value);
+            var tipo = (valor%2)?"Impar":"Par";
+            alert("Es "+ tipo);
+
+        }
+    </script>
+</head>
+
+<body>
+    <input type="text" id="valor">
+    <button type="button" onclick="esparimpar();">Par o Impar</button>
+
+</body>
