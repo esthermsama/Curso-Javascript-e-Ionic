@@ -1,0 +1,72 @@
+<!-- HACED UNA PÁGINA QUE CALCULE UN NÚMERO ALEATORIO ENTRE 1 Y 100 Y SE LO HAGA ADIVINAR AL USUARIO
+
+EL USUARIO TIENE 5 INTENTOS Y LA PÁGINA LE VA INFORMANDO SI EL NÚMERO ES MAYOR O MENOR.
+
+SI GASTADOS LOS 5 INTENTOS EL USUARIO NO ACIERTA, SE LE DA UN MENSAJE DE ERROR. EN CASO CONTRARIO, SE LE DA UN MENSAJE DE ENHORABUENA. -->
+
+<html>
+
+<head>
+    <title>
+        WEB CON JS
+    </title>
+
+    <script language="javascript">
+        const PREGUNTA = "Introduce número entre 1 y 100";
+        window.onload = adivinarAleatorio;
+
+        function genererarNumeroAleatorio(lim_inferior, lim_superior) {
+            var num_aleatorio = 0;
+
+            var n1 = Math.random();//entro 0 y 1
+            num_aleatorio = (n1 * (lim_superior - lim_inferior + 1)) + lim_inferior
+            num_aleatorio = Math.ceil(num_aleatorio);//redondeo
+
+            return num_aleatorio;
+        }
+        function pedirNumero() {
+            var num_introducido = 0;
+
+            num_introducido = prompt(PREGUNTA);
+
+            return num_introducido;
+        }
+       
+        function adivinarAleatorio() {
+            var num_intentos = 5;
+            var acertado = false;
+            var numero_aleatorio = genererarNumeroAleatorio(0, 100);
+            do {
+                var numero_usuario = pedirNumero();
+                num_intentos --;
+                if (numero_usuario == numero_aleatorio) {
+                    console.log("Ha acertado");
+                    enhorabuena();
+                    acertado = true;
+                } else if (numero_usuario > numero_aleatorio) {
+                    console.log("El número introducido es mayor");
+                    informarMayor();
+                } else {
+                    console.log("El número introducido es menor");
+                    informarMenor();
+                }
+            } while ((num_intentos>0) && (!acertado));
+        }
+        function enhorabuena() {
+            alert("ENHORABUENA HAS ACERTADO");
+        }
+        function informarMayor() {
+            alert("El número es mayor");
+        }
+        function informarMenor() {
+            alert("El número es menor");
+        }
+    </script>
+</head>
+
+<body>
+
+
+</body>
+
+</html>
