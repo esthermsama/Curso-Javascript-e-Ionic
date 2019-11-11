@@ -25,11 +25,13 @@ SI GASTADOS LOS 5 INTENTOS EL USUARIO NO ACIERTA, SE LE DA UN MENSAJE DE ERROR. 
             return num_aleatorio;
         }
         function pedirNumero() {
-            var num_introducido = 0;
+            var num_string;
+            var num_entero = 0
 
-            num_introducido = prompt(PREGUNTA);
+            num_string = prompt(PREGUNTA);
+            num_entero = parseInt(num_string);
 
-            return num_introducido;
+            return num_entero;
         }
        
         function adivinarAleatorio() {
