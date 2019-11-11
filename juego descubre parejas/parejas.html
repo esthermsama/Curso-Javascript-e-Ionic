@@ -1,0 +1,110 @@
+<html>
+
+<head>
+    <title>
+        WEB CON JS
+    </title>
+    <link rel="stylesheet" type="text/css" href="estilo2.css">
+    <script src="easytimer.js-master/dist/easytimer.min.js"></script>
+
+    
+
+    <script language="javascript">
+        window.onload = iniciarTablero;
+        
+        
+        function iniciarTablero() {
+            console.log("Inicia Tablero . . .");
+        
+            var td_actual;
+            var hijo_img;
+
+            var lista_td = document.querySelectorAll("td");
+            for (var i = 0; i < lista_td.length; i++) {
+                td_actual = lista_td[i];
+                td_actual.addEventListener('click', tocadoImagen);
+                hijo_img = td_actual.firstElementChild;
+                hijo_img.style.visibility = 'hidden';
+            }
+            console.log("Fin Inicia Tablero . . .");
+        
+        }
+        var contador=0;
+        var contador_completo=0;
+        var imagen;
+        var imagen2;
+        function tocadoImagen() {
+            console.log("El usuario tocó el td ");
+            console.log("THIS " + this);
+            
+            var imagen = this.firstElementChild;
+            if(contador >= 1){
+                // Visible más de una imagen
+                if(imagen.src != imagen2.src){
+                    // Las imagenes son distintas
+                    imagen2.style.visibility = "hidden";
+                    imagen.style.visibility = "visible";
+                    imagen2=imagen;
+                    
+                }else{
+                    // Las imagenes son iguales
+                    imagen.style.visibility = "visible";
+                    contador =0;
+                    contador_completo = contador_completo +1;
+                    // Si se ha completado el juego se redirige a una nueva pantalla
+                    if(contador_completo ==2){
+                        window.location.assign("https://www.w3schools.com");
+                    }
+                }
+                
+            }else{
+                // Hay visible una imagen
+                imagen2 = this.firstElementChild;
+                imagen2.style.visibility = 'visible';
+                contador =contador+1;
+            }
+
+        }
+       
+
+    </script>
+    <script>
+        var timerInstance = new easytimer.Timer();
+        timerInstance.start();
+        timerInstance.addEventListener('secondsUpdated', function (e) {
+        document.getElementById("basicUsage").innerHTML=timerInstance.getTimeValues().toString();
+        });
+    </script>
+</head>
+
+<body>
+    <table id="tabla">
+       <tr>
+            <td>
+                <img src="delgado.jpg">
+            </td>
+            <td>
+                <img src="pantera.jpg">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <img src="delgado.jpg">
+            </td>
+            <td>
+                <img src="pantera.jpg">
+            </td>
+        </tr>
+    </table>
+
+    <select id="select_num">
+        <!--opción por defecto-->
+        <option selected>2X2</option>
+        <option>3x2</option>
+        <option>4x2</option>
+    </select>
+    <div id="basicUsage">00:00:00</div>
+    
+</body>
+
+</html>
