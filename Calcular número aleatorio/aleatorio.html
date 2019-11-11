@@ -51,6 +51,9 @@ SI GASTADOS LOS 5 INTENTOS EL USUARIO NO ACIERTA, SE LE DA UN MENSAJE DE ERROR. 
                     informarMenor();
                 }
             } while ((num_intentos>0) && (!acertado));
+            if(!acertado){
+                alert ("HAS PALMADO. BUSCABAMOS "+ numero_aleatorio);
+            }
         }
         function enhorabuena() {
             alert("ENHORABUENA HAS ACERTADO");
