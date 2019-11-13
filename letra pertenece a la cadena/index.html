@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<head>
+    <script>
+
+        function calcularIMC() {
+            // Obtener cadena y letra
+            var cadena = document.getElementById("cadena").value;
+            var letra = document.getElementById("letra").value;
+
+            // Existe Letra
+            if (cadena.indexOf(letra) != -1) {
+                alert("la letra  "+ letra + " pertenece a la cadena");
+            }
+            
+        }
+
+    </script>
+    <style>
+        .titulos1 {
+            color: darkblue;
+            font-size: 23px;
+        }
+
+        .titulos1:hover {
+            color: red;
+            font-size: 23px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="titulos1">¿La letra se encuentra en la cadena?</h1>
+    <input type="text" id="cadena" placeholder="cadena">
+    <input type="text" id="letra" placeholder="letra">
+    <button type="button" onclick="calcularIMC();">Calcular</button>
+
+
+</body>
+<footer>
+
+</footer>
