@@ -1,0 +1,71 @@
+<!-- HACER UNA APLICACIÓN QUE CADA VEZ QUE CARGUE, SE MUESTRE UN CARTÓN DE BINGO DE 3 FILAS POR 5 COLUMNAS RELLENADAS CON NÚMEROS LAEATORIOS DEL 1 AL 90 -->
+
+<html>
+
+<head>
+    <title>
+        WEB CON JS
+    </title>
+
+    <script language="javascript">
+        window.onload = obtenerSitemaNavegador;
+
+        function obtenerSitemaNavegador() {
+            var sistema_operativo = retornarSO();
+            var elto_numero = document.createElement("label");
+            var div_numero = document.getElementById("div_numero");
+            elto_numero.innerHTML = sistema_operativo;
+            div_numero.appendChild(elto_numero);
+
+
+            var elto_img = document.createElement("img");
+            var div_imagen = document.getElementById("div_imagen");
+            if(sistema_operativo == "Linux"){
+                elto_img.src = "linux.jpeg"; 
+            }else if(sistema_operativo == "Macintosh"){
+                elto_img.src = "apple.png"; 
+            }else if(sistema_operativo == "Windows"){
+                elto_img.src = "win.jpeg"; 
+            }
+            div_imagen.appendChild(elto_img);
+
+            navegador();
+
+            var browser = document.getElementById("navegador");
+            browser.innerHTML = "El navegador es: " + navegador();
+        }
+        function navegador() {
+            var agente = window.navigator.userAgent;
+            
+            var navegadores = ["Chrome", "Firefox", "Safari", "Opera", "Trident", "MSIE", "Edge"];
+            for (var i in navegadores) {
+                if (agente.indexOf(navegadores[i]) != -1) {
+                     return navegadores[i];
+                }
+            }
+
+        }
+        function retornarSO() {
+            var navInfo = window.navigator.appVersion.toLowerCase();
+            if (navInfo.indexOf('win') != -1) {
+                so = 'Windows';
+            }
+            else if (navInfo.indexOf('linux') != -1) {
+                so = 'Linux';
+            }
+            else if (navInfo.indexOf('mac') != -1) {
+                so = 'Macintosh';
+            }
+            return so
+        }
+    </script>
+</head>
+
+<body>
+
+    <div id="div_imagen"></div>
+    <div id="div_numero"></div>
+    <div id="navegador"></div>
+</body>
+
+</html>
