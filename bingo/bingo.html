@@ -1,0 +1,254 @@
+<!-- HACER UNA APLICACIÓN QUE CADA VEZ QUE CARGUE, SE MUESTRE UN CARTÓN DE BINGO DE 3 FILAS POR 5 COLUMNAS RELLENADAS CON NÚMEROS LAEATORIOS DEL 1 AL 90 -->
+
+<html>
+
+<head>
+    <title>
+        WEB CON JS
+    </title>
+    <style>
+        table {
+            width: 75%;
+            height: 75%;
+        }
+
+        th,
+        td {
+            background-color:aqua;
+            text-align: center;
+            vertical-align: middle;
+        }
+       
+    </style>
+    <script language="javascript">
+  const RETARDO_JUEGO = 250;
+        window.onload = generarCarton;
+
+        function genererarNumeroAleatorio(lim_inferior, lim_superior) {
+            var num_aleatorio = 0;
+
+            var n1 = Math.random();//entro 0 y 1
+            num_aleatorio = (n1 * (lim_superior - lim_inferior + 1)) + lim_inferior
+            num_aleatorio = Math.ceil(num_aleatorio);//redondeo
+
+            return num_aleatorio;
+        }
+        const FILAS = 3;
+        const COLUMNAS = 5;
+        var lista_numero
+
+        function pintarCarton() {
+            var tabla = document.getElementById("carton");
+            var fila_nueva;
+            var celda_nueva;
+
+            for (var fila = 0; fila < FILAS; fila++) {
+                fila_nueva = document.createElement("tr");
+                for (var columna = 0; columna < COLUMNAS; columna++) {
+                    celda_nueva = document.createElement("td");
+                    fila_nueva.appendChild(celda_nueva);
+
+                }
+                tabla.appendChild(fila_nueva);
+            }
+            // modifica el atributo "border" de la tabla y lo fija a "2";
+            tabla.setAttribute("border", "6");
+
+        }
+
+        /*
+        * Función que recibe un número y comprueba si está ya en el cartón.
+        * Devolvemos true si si, false si no.
+        */
+        function isRepetido(numero_aleatorio) {
+            var repetido = false;
+            repetido = lista_numeros.includes(numero_aleatorio);
+            return repetido;
+        }
+
+        function crearListaNumeroAleatorioSinRepetir() {
+            var num_aleatorio;
+            var n_generados_valido = 0;
+            var dimension = FILAS * COLUMNAS;
+            do {
+
+                num_aleatorio = genererarNumeroAleatorio(0, 90);
+                if (!isRepetido(num_aleatorio)) {
+                    lista_numeros.push(num_aleatorio);
+                    n_generados_valido++;
+
+                } else {
+                    console.log("REPETIDO " + num_aleatorio);
+                }
+
+            } while (n_generados_valido < dimension);//acabo de rellenar
+            console.log("lista_numeros = " + lista_numeros);
+        }
+        function mostrarListaEnCarton() {
+            var lista_tds = document.querySelectorAll("td");
+            var dimension = FILAS * COLUMNAS;
+            var td_actual;
+            for (var i = 0; i < dimension; i++) {
+                td_actual = lista_tds[i];
+                td_actual.innerHTML = lista_numeros[i];
+            }
+        }
+        function rellenarCarton() {
+            lista_numeros = new Array();//con esto me creo la lista vacía
+
+            crearListaNumeroAleatorioSinRepetir();
+            lista_numeros.sort(comparaNumeros);
+            mostrarListaEnCarton();
+        }
+        function comparaNumeros(n1, n2) {
+            var valor_devuelto;
+
+            valor_devuelto = n1 - n2;
+            /*if(n1>n2){
+                valor_devuelto =1;
+            }else if (n1<n2){
+                valor_devuelto=-1;
+            }else{
+                valor_devuelto=0;
+            }*/
+            return valor_devuelto;
+        }
+        function eliminarNumTablero (numero)
+            {
+                var lista_tds = document.querySelectorAll("td");
+                var encontrado = false;
+                var num_aux=0;
+                var pos = 0;
+                do {
+                    num_aux = lista_tds[pos].innerHTML;
+                    if (num_aux==numero)
+                    {
+                        console.log ("lo encontré");
+                        lista_tds[pos].innerHTML = "*";
+                        encontrado=true;
+                    } else {
+                        pos = pos+1;
+                    }
+
+                }
+                while (!encontrado);
+
+            }
+
+            var pos_saca = 0;
+
+            function comprobarResultado()
+            {
+                var imagen_bombo = document.getElementById("imagen_lisa");
+                imagen_bombo.remove();
+                var num_aleatorio = saca[pos_saca];//pillo número genererarNumeroAleatorio(0, 90);
+                pos_saca++;
+                var div_n_extraido = document.getElementById ("numero_extraido");
+                div_n_extraido.innerHTML = num_aleatorio;
+                if (lista_numeros.includes(num_aleatorio))
+                {
+                    console.log("tengo el número");
+                     //LO MARCO Y LO ELIMNO
+                    var pos = lista_numeros.indexOf (num_aleatorio);
+                    lista_numeros.splice(pos, 1);//saco de la lista
+                    eliminarNumTablero(num_aleatorio);//quito del tablero
+                    //SI HE GANADO, PARO
+                    if (lista_numeros.length == 0)
+                    {
+                        console.log("BIIINGO");
+                        alert ("BINGO");  
+                        window.open("https://www.amazon.es"); 
+                    } else {
+                        console.log ("no he acabado aún me quedan " + lista_numeros.length);
+                        setTimeout(jugar, RETARDO_JUEGO);
+                    }
+                } else {
+                    console.log("NO tengo el número");
+                    setTimeout(jugar, RETARDO_JUEGO);
+                }
+
+            }
+
+            function sacarBola ()
+            {
+                var imagen_bombo = document.createElement("img");
+                imagen_bombo.id = "imagen_lisa";
+                imagen_bombo.src = "bingo.gif";
+                var div_imagen = document.getElementById("imagen");
+                div_imagen.appendChild(imagen_bombo);
+                
+            }
+
+            function shuffle(a) {
+                var j, x, i;
+                for (i = a.length - 1; i > 0; i--) {
+                    j = Math.floor(Math.random() * (i + 1));
+                    x = a[i];
+                    a[i] = a[j];
+                    a[j] = x;
+                }
+                return a;
+            }
+
+            function rellenarSaca ()
+            {
+                saca = new Array ();
+
+                for (var i = 0; i<=90; i++ )
+                {
+                    saca.push (i);
+                }
+                console.log ("Saca = " + saca);
+                shuffle(saca);
+                console.log ("Saca post shuffle = " + saca);
+            }
+
+            function generarCarton() {
+                
+                pintarCarton();//dibujo la tabla, el cartón, la estructura
+                rellenarCarton();//relleno con núms. aleatorios
+                rellenarSaca();
+
+                jugar();
+            }
+
+            function jugar ()
+            {
+                //caso especial
+                var div_n_extraido = document.getElementById("numero_extraido");
+                div_n_extraido.innerHTML="";//limpio
+                sacarBola();
+                setTimeout(comprobarResultado, RETARDO_JUEGO);
+                
+
+            }
+
+               // [0, 91 ]
+            function genererarNumeroAleatorio(lim_inferior, lim_superior) {
+                var num_aleatorio = 0;
+
+                var n1 = Math.random();//entro 0 y 1
+                num_aleatorio = (n1 * (lim_superior - lim_inferior));// +1;
+                num_aleatorio = Math.ceil(num_aleatorio);//redondeo
+
+                return num_aleatorio;
+            }
+
+    </script>
+</head>
+
+<body>
+
+    <table class="tabla" id="carton">
+    </table>
+    <img>
+    <div id="resultados">
+        <div id="imagen">       
+        </div>
+        <div id="numero_extraido" class="num_extra">
+        </div>
+        
+    </div>
+</body>
+
+</html>
