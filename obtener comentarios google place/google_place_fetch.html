@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .comentarios {
+            padding: 20px;
+        }
+
+        .titulo1 {
+            margin-left: 20px;
+        }
+
+        .autor {
+            padding-bottom: 20px;
+            padding-top: 20px;
+        }
+
+        .opinion {
+            padding-top: 20px;
+            width: 50%;
+        }
+
+        .img_estrella {
+            height: 25px;
+            width: 25px;
+        }
+
+        .linea {
+            height: 5px;
+            margin-left: 0%;
+            margin-right: 50%;
+            background-color: black;
+        }
+    </style>
+    <script>
+
+
+        //1 Obtener API propia https://developers.google.com/places/web-service/get-api-key
+        //2 Elegir un lugar ID_LUGAR https://developers.google.com/places/web-service/place-id
+        //2 Instalar FIREFOX
+        //3 Instalar extensión CORS Everywhere para ese navegador
+        //4 Activar extensión
+
+        const ID_LUGAR = "ChIJGX8iNmMJag0RSlkjd7ldVg4";
+        const CLAVE_API_GOOGLE_PLACES = "AIzaSyCVJqlgPwBEibBnOYOMD6KMZEGaoqjxazM"
+
+        const URI = "https://maps.googleapis.com/maps/api/place/details/json?placeid=" + ID_LUGAR + "&key=" + CLAVE_API_GOOGLE_PLACES;
+
+
+        //CON PROMESAS
+
+        
+        fetch(URI)
+            .then(function (respuesta) {
+                console.log("respuesta OK. deserializo ...");
+                return respuesta.json();//devuelve otra promesa
+            }
+            )
+            .then(function (objeto_json) {
+                console.log(objeto_json);
+                var comentarios = objeto_json.result.reviews.length;
+                for (i = 0; i < comentarios; i++) {
+                    mostrarComentario(objeto_json.result.reviews[i]);
+                }
+            }
+            )
+            .catch(function (error) {
+                console.error("Fallito " + error);
+            }
+            );
+
+        //CON PROMESAS Y FUNCIONES DE FLECHA
+
+        /* fetch(URI)
+             .then(respuesta => respuesta.json())
+             .then(objecto_json => console.log (objecto_json));
+             */
+
+
+        function mostrarComentario(review) {
+
+            var div_comentarios = document.getElementById("div_comentarios");///obtengo el padre
+
+            //CREO EL COMENTARIO Y LE RELLENO SU IMAGEN, TEXTO, ETC
+            var comentario = document.createElement("div");//creo el comentario
+            var nombre = document.createElement("div");//el autor
+            nombre.innerHTML = review.author_name;
+
+
+            var texto = document.createElement("div");//la reseña
+            texto.innerHTML = review.text;
+
+
+            var imagen = document.createElement("img");//la imagen
+            imagen.src = review.profile_photo_url;
+
+
+
+            comentario.appendChild(nombre);
+            comentario.appendChild(imagen);
+            comentario.appendChild(texto);
+
+            var rating = document.createElement("div");//rating
+            var num_estrellas = parseInt(review.rating);
+            for (var i = 0; i < num_estrellas; i++) {
+                var img_estrella = document.createElement("img");
+                img_estrella.src = "estrella.png";
+                img_estrella.setAttribute("class", "img_estrella");
+                comentario.appendChild(img_estrella);
+            }
+            var fecha = document.createElement("div");//fecha
+            fecha.innerHTML = new Date(review.time * 1000).toDateString();
+            comentario.appendChild(fecha);
+
+            //FIN DE CREAR EL COMENTARIO
+
+            var linea = document.createElement("hr");
+            linea.setAttribute("class", "linea");
+            comentario.appendChild(linea);
+
+            div_comentarios.appendChild(comentario);
+            nombre.className = "autor";
+            texto.className = "opinion";
+            imagen.className = "imagen";
+
+
+        }
+    </script>
+</head>
+
+<body>
+    <h1 class="titulo1">Opiniones Tobogan Zero</h1>
+    <div id="div_comentarios" class="comentarios">
+    </div>
+    </div>
+</body>
+
+</html>
