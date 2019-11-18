@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .comentarios {
+            padding: 20px;
+        }
+
+        .titulo1 {
+            margin-left: 20px;
+        }
+
+        .autor {
+            padding-bottom: 20px;
+            padding-top: 20px;
+        }
+
+        .opinion {
+            padding-top: 20px;
+            width: 50%;
+        }
+
+        .img_estrella {
+            height: 25px;
+            width: 25px;
+        }
+
+        .linea {
+            height: 5px;
+            margin-left: 0%;
+            margin-right: 50%;
+            background-color: black;
+        }
+    </style>
+    <script>
+
+        var xmlHttp;
+
+        //1 Crear URI 
+        //2 Instalar FIREFOX
+        //3 Instalar extensión CORS Everywhere para ese navegador
+        //4 Activar extensión
+
+        const URI = "http://10.1.2.10:8081/cfticionic/calculaletra/";
+
+
+        function cargarInfoSitio(URI_completa) {
+            xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = procesarEventosRecibir;
+            xmlHttp.open('GET', URI_completa, true);
+            xmlHttp.send(null);
+
+        }
+
+        function procesarEventosRecibir() {
+            if (xmlHttp.readyState == 4) {
+                if (xmlHttp.status == 200) {
+                    var cuerpo = xmlHttp.responseText;
+                    var objeto_js = JSON.parse(cuerpo);
+                    console.log("OPINIONES " + objeto_js);
+                    mostrarDni(objeto_js);
+
+                } else {
+                    console.log("error " + xmlHttp.status);
+                }
+            }
+        }
+        function mostrarDni(objeto_js) {
+            // MOSTRAR LA LETRA DEL DNI
+            alert("La letra de tu dni es: "+ objeto_js.letra);
+        }
+
+        function calcularLetra ()
+        { 
+            //OBTENER EL NUMERO DE LA CAJA y CREAR URI
+            var caja = document.getElementById("numdni");
+            var cadena_dni = caja.value;
+            console.log("Dni " +cadena_dni);
+            var URI_completa = URI + cadena_dni;
+            console.log("URI " +URI_completa);
+            cargarInfoSitio(URI_completa);
+            
+        }
+    </script>
+</head>
+
+<body>
+    <h1 class="titulo1">Obtener Letra del DNI</h1>
+    <input type="text" id="numdni">
+    <button type="button" onclick="calcularLetra();">Calcular</button>
+    </div>
+</body>
+
+</html>
