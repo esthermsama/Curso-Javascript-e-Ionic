@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .boton {
+            background-color: #4CAF50;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+    </style>
+    <script>
+        var xmlHttp;
+        const URI = "http://10.1.2.10:8081/cfticionic/dni";
+
+
+        function cargarInfoSitio(dni_json) {
+            xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = procesarEventosRecibir;
+            xmlHttp.open("POST", URI, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xmlHttp.send(dni_json);
+        }
+
+        function procesarEventosRecibir() {
+            if (xmlHttp.readyState == 4) {
+                if (xmlHttp.status == 201) {
+                    console.log("Ha terminado con error: " + xmlHttp.status);
+
+
+                } else {
+                    console.log("error " + xmlHttp.status);
+                }
+            }
+        }
+        class Dni {
+            constructor(num, caracter) {
+                this.numero = num;
+                this.letra = caracter;
+            }
+
+
+            mostrarDni() {
+                console.log("voy a mostrar un DNI");
+                console.log("numero " + this.numero);
+                console.log("letra " + this.letra);
+            }
+        }
+        function validar(num_dni, letra) {
+            var valido;
+            const EXPRESION_REGULAR_NUM = /^\d{8}$/;
+            var patron_num = new RegExp(EXPRESION_REGULAR_NUM);
+            var num_dni_ok = patron_num.test(num_dni);
+
+            const EXPRESION_REGULAR_LETRA = /^[a-zA-Z]$/;
+            var patron_letra = new RegExp(EXPRESION_REGULAR_LETRA);
+            var letra_ok = patron_letra.test(letra);
+            if (num_dni_ok && letra_ok) {
+                valido = true;
+            } else {
+                valido = false;
+            }
+            return valido;
+        }
+
+        function calcularDni() {
+            var num_dni = parseInt(document.getElementById("numdni").value);
+            var letra = document.getElementById("letra").value;
+            var miDni = new Dni(num_dni, letra);
+            if (validar(num_dni, letra)== true) {
+                var dni_json = JSON.stringify(miDni);
+                console.log("Dni en JSON = " + dni_json);
+                cargarInfoSitio(dni_json);
+            } else {
+                console.log("Validación incorrecta");
+            }
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <h1 class="titulo1">Introduce DNI</h1>
+    <input type="text" placeholder="número dni" id="numdni">
+    <input type="text" placeholder="letra" id="letra">
+    <button class="boton" type="button" onclick="calcularDni();">Enviar</button>
+</body>
+
+</html>
