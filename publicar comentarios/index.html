@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .boton {
+            background-color: cadetblue;
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 2px;
+
+        }
+
+        #caja {
+            border: 1px solid black;
+            border-radius: 7px;
+            width: 25%;
+            padding: 10px;
+            background-color: lightgrey;
+            margin: auto;
+        }
+    </style>
+    <script>
+        var xmlHttp;
+        const URI = "http://10.1.2.10:8081/cfticionic/usuariocftic";
+
+
+        class Login {
+            constructor(nombre, pwd) {
+                this.nombre = nombre;
+                this.pwd = pwd;
+            }
+        }
+        function cargarLogin(json) {
+            xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = procesarEventosRecibir;
+            xmlHttp.open("POST", URI, true);
+            xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xmlHttp.send(json);
+        }
+
+        function procesarEventosRecibir() {
+            if (xmlHttp.readyState == 4) {
+                if (xmlHttp.status == 200) {
+                    var cuerpo = xmlHttp.responseText;
+                    objeto_js = JSON.parse(cuerpo);
+                    var token = objeto_js.token;
+                    localStorage.setItem("usuario", token);
+                    console.log("Token " + token);
+                    var nombre = objeto_js.nombre;
+                    localStorage.setItem("nombre", nombre);
+                    console.log("Nombre " + nombre);
+                    window.location.href = 'file:///Users/dev1/Documents/Curso Javascript e Ionic/publicar comentarios/obtener_fotos.html';
+                } else {
+                    console.log("error " + xmlHttp.status);
+                }
+            }
+        }
+
+        function validar(texto) {
+            var valido;
+            const EXPRESION_REGULAR = /^\w{8}$/;
+            var patron = new RegExp(EXPRESION_REGULAR);
+            var texto_ok = patron.test(texto);
+
+            if (texto_ok) {
+                valido = true;
+            } else {
+                valido = false;
+            }
+            return valido;
+        }
+        function existe(clave) {
+            var esta = false;
+
+            esta = (localStorage.getItem(clave) != null);
+
+            return esta;
+        }
+        function login() {
+            // Si no existe el usuario
+            if (!existe("usuario")) {
+                var usuario = document.getElementById("usuario").value;
+                var contraseña = document.getElementById("contraseña").value;
+                if (validar(usuario) && validar(contraseña)) {
+                    var registro = new Login(usuario, contraseña);
+                    console.log("Nombre " + registro.nombre);
+                    console.log("Contraseña " + registro.pwd);
+                    var json = JSON.stringify(registro);
+                    console.log("JSON " + json);
+                    cargarLogin(json);
+                } else {
+                    alert("Usuario y contraseña errorenos");
+                    limpiarCampos();
+                }
+            } else {
+                window.location.href = 'file:///Users/dev1/Documents/Curso Javascript e Ionic/publicar comentarios/obtener_fotos.html';
+            }
+        }
+
+
+        function limpiarCampos() {
+            var usuario = document.getElementById("usuario");
+            usuario.value = "";
+            var password = document.getElementById("contraseña");
+            password.value = "";
+
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <div align="center" id="caja">
+        <h1 class="titulo1">Aplicación de comentarios</h1>
+        <input type="text" placeholder="usuario" id="usuario"><br>
+        <input type="password" placeholder="contraseña" id="contraseña"><br>
+        <button class="boton" type="button" onclick="login();">Login</button>
+
+    </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .boton {
+            background-color:cadetblue;
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 2px;
+        }
+
+        #div_fotos {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 10px;
+            width: 900px;
+            margin: 0 auto;
+        }
+
+        .imagen_foto {
+            width: 90%;
+            height: 90%;
+        }
+        .imagen_foto:hover{
+           filter: grayscale(80%);
+        }
+    </style>
+    <script>
+        var xmlHttp;
+        const URI_FOTOS = "http://10.1.2.10:8081/cfticionic/fotos?key=";
+
+        onload = iniciarFotos();
+
+        function iniciarFotos() {
+            if (existe("usuario")) {
+            
+                var token = leer("usuario");
+                cargarFotos(token);
+            }
+        }
+        function obtenerFoto() {
+           console.log(this.id);
+           localStorage.setItem("id_foto", this.id);
+           window.location.href = 'file:///Users/dev1/Documents/Curso Javascript e Ionic/publicar comentarios/obtener_info.html';
+        }
+        function cargarFotos(token) {
+            xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = procesarFotos;
+            var uri_completa = URI_FOTOS + token;
+            xmlHttp.open('GET', uri_completa, true);
+            xmlHttp.send(null);
+
+        }
+        function procesarFotos() {
+            if (xmlHttp.readyState == 4) {
+                if (xmlHttp.status == 200) {
+                    var cuerpo = xmlHttp.responseText;
+                    objeto_js = JSON.parse(cuerpo);
+                    console.log("OPINIONES " + objeto_js);
+                    var fotos = objeto_js.length;
+                    for (i = 0; i < fotos; i++) {
+                        mostrarFotos(objeto_js[i]);
+                    }
+                } else {
+                    console.log("error " + xmlHttp.status);
+                }
+            }
+        }
+        function mostrarFotos(obj_foto) {
+
+            var div_fotos = document.getElementById("div_fotos");//obtengo el padre
+
+            //CREO LA FOTO Y LE RELLENO SU IMAGEN
+            var foto = document.createElement("div");//creo el comentario
+       
+
+            var imagen = document.createElement("img");//la imagen
+            imagen.src = obj_foto.ruta;
+            imagen.setAttribute("class", "imagen_foto");
+            imagen.setAttribute("id",obj_foto.idfoto);
+            imagen.addEventListener("click",obtenerFoto);
+            foto.appendChild(imagen);
+            //FIN DE CREAR EL COMENTARIO
+
+            div_fotos.appendChild(foto);
+
+        }
+
+        function leer(clave) {
+            var valor;
+
+            valor = localStorage.getItem(clave);
+
+            return valor;
+        }
+
+        function existe(clave) {
+            var esta = false;
+
+            esta = (localStorage.getItem(clave) != null);
+
+            return esta;
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <div align="center" div="caja">
+        <h1 class="titulo1">Aplicación de comentarios</h1>
+        <div align="center" id="div_fotos" class="div_fotos">
+        </div>
+    </div>
+</body>
+
+</html>

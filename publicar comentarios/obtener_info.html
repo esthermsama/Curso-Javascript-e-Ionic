@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+
+        #caja {
+            width: 1000px;
+            margin: 0 auto;
+        }
+
+        #caja2 {
+            text-align: center;
+            display: flex;
+        }
+        #texto {
+            margin: 20px;
+        }
+        .comentario{
+            padding: 10px;
+        }
+        #comentarios{
+            height:400px;
+            overflow: auto;
+            text-align: left;
+        }
+        .boton {
+            background-color:cadetblue;
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 2px;
+        }
+        .botones{
+            background-color:cadetblue;
+            border: none;
+            color: white;
+            padding: 5px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 10px;
+            margin-top: 10px;
+            border-radius: 2px;
+            margin-left:10px;
+        }
+
+        .foto {
+            width: 50%;
+            height: 50%;
+        }
+
+    </style>
+
+    <script src="./publicar.js"></script>
+    <script src="./eliminar.js"></script>
+    <script src="./modificar.js"></script>
+    <script src="./obtener_comentarios.js"></script>
+    <script>
+        var xmlHttp;
+        const URI_FOTOS = "http://10.1.2.10:8081/cfticionic/foto?key=";
+
+        onload = iniciarFotos();
+
+        function iniciarFotos() {
+            if (existe("usuario")) {
+
+                var key = leer("usuario");
+                var uri = URI_FOTOS + key;
+                id_foto = parseInt(localStorage.getItem("id_foto"));
+                var uri_completa = uri + "&idfoto=" + id_foto;
+                cargarFotos(uri_completa);
+            }
+        }
+        function cargarFotos(uri_completa) {
+            xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = procesarFotos;
+            xmlHttp.open('GET', uri_completa, true);
+            xmlHttp.send(null);
+
+        }
+        function procesarFotos() {
+            if (xmlHttp.readyState == 4) {
+                if (xmlHttp.status == 200) {
+                    var cuerpo = xmlHttp.responseText;
+                    objeto_js = JSON.parse(cuerpo);
+                    console.log("OPINIONES " + objeto_js);
+                    mostrarFotos(objeto_js);
+
+                } else {
+                    console.log("error " + xmlHttp.status);
+                }
+            }
+        }
+        function mostrarFotos(obj_foto) {
+
+            var foto = document.getElementById("foto");
+            var imagen = document.createElement("img");//la imagen
+            imagen.src = obj_foto.ruta;
+            imagen.setAttribute("class", "imagen_foto");
+
+            foto.appendChild(imagen);
+        }
+
+        function leer(clave) {
+            var valor;
+
+            valor = localStorage.getItem(clave);
+
+            return valor;
+        }
+
+        function existe(clave) {
+            var esta = false;
+
+            esta = (localStorage.getItem(clave) != null);
+
+            return esta;
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <div id="caja">
+        <h1 class="titulo1">Aplicación de comentarios</h1>
+        <div id="caja2">
+            <div id="foto"></div>
+            
+            <div id="comentarios"></div>
+        </div>
+        <button class="boton" type="button" onclick="publicarComentario();">Publicar</button>
+        <button class="boton" type="button" onclick="obtener_comentarios();">Comentarios</button>
+        <br><br>
+        <textarea id="texto" rows="20" cols="30"></textarea>
+    </div>
+    </div>
+</body>
+
+</html>
