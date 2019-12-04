@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Averiguar la letra del dni
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding">
+    <ion-input type="number" min="1" max="10" [(ngModel)]="num" placeholder="Introduce el número del dni"></ion-input>
+    <p>Tu letra es {{ letra}}</p>
+    <ion-button expand="block" (click)="calcularLetra()">Calcular Letra</ion-button>
+    <!-- routerDirection="back" routerDirection="root"-->
+    <ion-button expand="block" routerLink="/imc" routerDirection="forward">Ir a IMC</ion-button>
+  </div>
+</ion-content>
