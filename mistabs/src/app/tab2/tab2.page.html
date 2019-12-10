@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>IMC</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-input type="number" placeholder="Intro Peso (kg)" [(ngModel)]="imc.peso"></ion-input>
+  <ion-input type="number" placeholder="Intro Altura (m)" [(ngModel)]="imc.altura"></ion-input>
+  <ion-button (click)="calcularIMC()">CALCULAR</ion-button>
+  <ion-button [disabled]="!arrayImc?.length>0" (click)="borrar()">BORRAR</ion-button>
+  <ion-button [disabled]="!arrayImc?.length>0" (click)="ordenarPeso()">Ordenar por peso</ion-button>
+  <ion-button [disabled]="!arrayImc?.length>0" (click)="ordenarAltura()">Ordenar por altura</ion-button>
+  <ion-grid>
+    <ion-list-header>
+      <ion-col>PESO</ion-col>
+      <ion-col>ALTURA</ion-col>
+      <ion-col>IMC</ion-col>
+      <ion-col>FOTO</ion-col>
+    </ion-list-header>
+  </ion-grid>
+  <!--<ion-grid *ngIf="imc.foto">
+    <ion-row>
+      <ion-col>{{imc.peso}}</ion-col>
+      <ion-col>{{imc.altura}}</ion-col>
+      <ion-col>{{imc.nominal}}</ion-col>
+      <ion-col><ion-img [src]="imc.foto"></ion-img></ion-col>
+    </ion-row>
+  </ion-grid>-->
+  <!--estaá sección solo se muestra si la lista es distinta de null y tiene algún elemento-->
+  <div class="ion-content" *ngIf="arrayImc?.length>0">
+    <ion-grid *ngFor="let oimc of arrayImc">
+      <ion-row>
+          <ion-col>{{oimc.peso}}</ion-col>
+          <ion-col>{{oimc.altura}}</ion-col>
+          <ion-col>{{oimc.nominal}}</ion-col>
+          <ion-col><ion-img [src]="oimc.foto"></ion-img></ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
